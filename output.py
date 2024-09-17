@@ -16,7 +16,7 @@ result=input
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 model = genai.GenerativeModel("gemini-pro")
 
-system = """You are given a detailed 2-day travel itinerary for Bangalore. Your task is to extract and list only the locations mentioned, categorized by the day. 
+system = """You are given a detailed n-day travel itinerary for Bangalore. Your task is to extract and list only the locations mentioned, categorized by the day. 
 Make sure to omit any descriptions, reasons, prices, or other details. Focus strictly on the location names based on the day."""
 
 def get_gemini_responses(input_text, system_prompt):
