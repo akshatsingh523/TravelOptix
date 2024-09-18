@@ -2,9 +2,18 @@ from crewai import Crew
 from textwrap import dedent
 from trip_agents import TripAgents
 from trip_tasks import TripTasks
-
+from langchain_core.prompts import ChatPromptTemplate
+import openai
+import google.generativeai as genai
+from langchain_openai import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
+import os
 from dotenv import load_dotenv
+
 load_dotenv()
+
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+model = genai.GenerativeModel("gemini-pro")
 
 class TripCrew:
 
@@ -97,3 +106,13 @@ if __name__ == "__main__":
   print("## Here is your detailed trip itinerary, carefully crafted to ensure an enjoyable and well-organized travel experience. It includes all the key destinations, activities, and timelines to make your trip memorable and hassle-free.")
   print("########################\n")
   print(result)
+
+
+def get_gemini_responses(input_text, system):
+    # Combine the system prompt and input text
+    system = """You are given a detailed {number_of_days} days travel itinerary for {arrival_city}. Your task is to extract and list only the locations mentioned, categorized by the day. 
+    Make sure to omit any descriptions, reasons, prices, or other details. Focus strictly on the location names based on the day."""
+    combined_input = f"{system_prompt}\n\nInput: {input_text}"
+    response = model.generate_content(combined_input)
+    return response.text
+
